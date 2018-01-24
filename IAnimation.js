@@ -41,7 +41,7 @@ var IAnimation;
 		this._Canvas = document.createElement("canvas");
 		Container.appendChild(this._Canvas);
 		this.Width = 0;
-		this.Heigth = 0;
+		this.Height = 0;
 
 		this._Title = "Untitle";
 		this._Version = 100.00;
@@ -147,10 +147,10 @@ var IAnimation;
 		},
 		SetSize:function(w,h){ //设置Canvas画布大小
 			this.Width = w || this._Container.offsetWidth;
-			this.Heigth = h || this._Container.offsetHeight;
+			this.Height = h || this._Container.offsetHeight;
 			this._Canvas.width = this.Width;
-			this._Canvas.height = this.Heigth;
-			this._ConloseLog("SetSize","Set - width:"+this.Width+" | height:"+this.Heigth);
+			this._Canvas.height = this.Height;
+			this._ConloseLog("SetSize","Set - width:"+this.Width+" | height:"+this.Height);
 			this.AutoDraw();
 			this._AddAction(this,"SetSize()");
 			return true;

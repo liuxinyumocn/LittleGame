@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>基于HTML5的在线小游戏制作 Power By Liuxinyumo.cn</title>
+	<style type="text/css">
+		div{
+			border: 1px solid red;
+			width: 750px;
+			height: 600px;
+		}
+	</style>
+</head>
+<body>
+	<div id="container"></div>
+</body>
+<script type="text/javascript" src="IGraphElement.js"></script>
+<script type="text/javascript" src="IAnimation.js"></script>
+<script type="text/javascript" src="Game.js"></script>
+<script type="text/javascript">
+	//用于移植的控制代码
+	var Container = document.getElementById("container");
+	var game = new Gobang(Container);
+</script>
+</html>

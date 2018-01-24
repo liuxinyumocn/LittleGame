@@ -1,8 +1,8 @@
 var IGraphElement = [
 	{
-		ID:"BattleOfBallLogo",
+		ID:"GobangLogo",
 		Version:100.00,
-		Src:new Array("BattleOfBall.png"),
+		Src:new Array("GobangLogo.png"),
 		Class:function(){
 			//初始化函数 
 			this.Constructor = function(){
@@ -43,121 +43,6 @@ var IGraphElement = [
 				var y = this.Top > 0 ? this.Top : 0-this.Top;
 				if(x <= Img.width/2 && y <= Img.height/2)
 					return true;		
-				return false;
-			}
-		}
-	},
-	{
-		ID:"Background",
-		Version:100.00,
-		Src:new Array(),
-		Class:function(){
-			//初始化函数 
-			this.Width;
-			this.Heigth;
-			this.Length;
-			this._L;
-			this._T;
-			this.Color;
-			this.AddLeft=function(V){
-				this._L += V;
-				this._L = this._L < 0 ? this._L + this.Length : this._L;
-				this._L = this._L % this.Length;
-			}
-			this.AddTop=function(V){
-				this._T += V;
-				this._T = this._T < 0 ? this._T + this.Length : this._T;
-				this._T = this._T % this.Length;
-			}
-
-			this.Constructor = function(){
-				this.Length = 30;
-				this._L=0;
-				this._T=0;
-				this.Color = "rgb(200,200,200)";
-			}
-			this.Draw = function(ctx){
-				ctx.beginPath();
-				ctx.lineWidth = 0.5;
-				ctx.moveTo(this.Left+this._L+this.Width/2,this.Top+this._T);
-				ctx.lineTo(this.Left+this._L-this.Width/2,this.Top+this._T);
-				for(var i = 1 ;i<this.Heigth/2;i++){
-					ctx.moveTo(this.Left+this._L+this.Width/2,this.Top+this._T-i*this.Length);
-					ctx.lineTo(this.Left+this._L-this.Width/2,this.Top+this._T-i*this.Length);
-					ctx.moveTo(this.Left+this._L+this.Width/2,this.Top+this._T+i*this.Length);
-					ctx.lineTo(this.Left+this._L-this.Width/2,this.Top+this._T+i*this.Length);
-				}
-				ctx.moveTo(this.Left+this._L,this.Top+this._T+this.Heigth/2);
-				ctx.lineTo(this.Left+this._L,this.Top+this._T-this.Heigth/2);
-				for(var i = 1 ;i<this.Width/2;i++){
-					ctx.moveTo(this.Left+this._L+i*this.Length,this.Top+this._T+this.Heigth/2);
-					ctx.lineTo(this.Left+this._L+i*this.Length,this.Top+this._T-this.Heigth/2);
-					ctx.moveTo(this.Left+this._L-i*this.Length,this.Top+this._T+this.Heigth/2);
-					ctx.lineTo(this.Left+this._L-i*this.Length,this.Top+this._T-this.Heigth/2);
-				}
-				ctx.strokeStyle = this.Color;
-				ctx.stroke();
-				ctx.closePath();
-
-				return true;
-			}
-			this.Over = function(){		
-				return false;
-			}
-		}
-	},
-	{
-		ID:"Ball",
-		Version:100.00,
-		Src:new Array("Arrow.png"),
-		Class:function(){
-			//初始化函数 
-			this.Radius;
-			this.Color;
-			this.Constructor = function(){
-				this.Radius = 20;
-				this.Color = "rgb(91,91,91)";
-			}
-			this.Draw = function(ctx){
-				ctx.beginPath();
-				ctx.arc(this.Left,this.Top,this.Radius,0,Math.PI*2,true);
-				ctx.closePath();
-				ctx.fillStyle = this.Color;
-				ctx.fill();
-				var Img = this.Src[0];
-				ctx.drawImage(Img,this.Left+this.Radius,this.Top-Img.height/2,Img.width,Img.height);
-				return true;
-			}
-			this.Over = function(){
-				if(this.Left*this.Left + this.Top * this.Top <= this.Radius*this.Radius)
-					return true;		
-				return false;
-			}
-		}
-	},
-	{
-		ID:"Info",
-		Version:100.00,
-		Src:new Array(),
-		Class:function(){
-			//初始化函数 
-			this.Text;
-			this.fontSize;
-			this.fontFamily;
-			this.fontColor;
-			this.Constructor = function(){
-				this.Text = "当前体重为：100kg";
-				this.fontSize = 20;
-				this.fontFamily = "宋体";
-				this.fontColor = "rgb(200,200,200)";
-			}
-			this.Draw = function(ctx){
-				ctx.fillStyle = this.fontColor;
-				ctx.font = this.fontSize+"px "+this.fontFamily;
-				ctx.fillText(this.Text,this.Left,this.Top+this.fontSize);
-				return true;
-			}
-			this.Over = function(){		
 				return false;
 			}
 		}
