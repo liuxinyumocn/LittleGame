@@ -8,6 +8,8 @@ var Gobang;
 		this._WelcomePage = null;
 		this._MainPage = null;
 		this._BeginGameButton = null;
+
+		this._Sight = null;
 		this._Init();
 	}
 	Gobang.fn = Gobang.prototype = {
@@ -19,7 +21,7 @@ var Gobang;
 				}
 			}
 			this._Animation.DownloadIMGing = CallBack;
-			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board"]);
+			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece"]);
 		},
 		_DownloadFinished:function(){
 			//此处外部资源已经全部加载完毕可以创建游戏场景。
@@ -69,13 +71,36 @@ var Gobang;
 		_CreateMainScene:function(){
 			this._MainPage = this._Animation.CreatePage();
 			var Board = this._MainPage.AddElement("Board");
-			Board.Left(10);
-			Board.Top(10);
+			Board.Left(15);
+			Board.Top(15);
 			Board.Visible(true);
 
+			var piece = this._MainPage.AddElement("Piece");
+			var p = PiecePostionKit.BoardPostion(5,5);
+			piece.Left(p.x);
+			piece.Top(p.y);
+			piece.Action("SetWhite()");
+			piece.Visible(true);
+
+			//创建辅助器
+			var Sight = this._MainPage.AddElement("Sight");
+			this._Sight = Sight;
+			p = PiecePostionKit.BoardPostion(8,8);
+			Sight.Left(p.x);
+			Sight.Top(p.y);	
+			Sight.Visible(true);
 		},
 		_Move:function(){
-
+			if(this._Animation.CurrentPage == this._MainPage){
+				var x = this._Listener.X;
+				var y = this._Listener.Y;
+				var ps = PiecePostionKit.ScreenPostion(x,y);
+				if(ps.x != -1){
+					var p = PiecePostionKit.BoardPostion(ps.x,ps.y);
+					this._Sight.Left(p.x);
+					this._Sight.Top(p.y);
+				}
+			}
 		},
 		_Up:function(){
 			var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
@@ -86,6 +111,35 @@ var Gobang;
 		},
 		_Down:function(){
 
+		}
+	}
+	
+	var PiecePostionKit = {
+		//棋子落点工具
+		//需要给出棋盘左上角的落点坐标（而非棋盘左上角坐标，因为有编号）
+		//允许的误差半径
+		//因为是工具类，设计成静态类即可
+		Displacement:{	
+		//棋盘偏移 我是一点点试出来因为比较快 你创建一个棋子看看什么位置能放在左上角即可
+			x:52,
+			y:52
+		},
+		Radius:20,
+		BoardPostion:function(x,y){	//提供棋盘坐标 给出屏幕落点坐标
+			var X,Y;
+			X = this.Displacement.x + (x-1)*40;
+			Y = this.Displacement.y + (y-1)*40;
+			return {x:X,y:Y};
+		},
+		ScreenPostion:function(x,y){	//提供屏幕坐标 给出棋盘落点坐标
+			var X,Y;
+			X = x-this.Displacement.x+this.Radius+40;
+			Y = y-this.Displacement.y+this.Radius+40;
+			var X = parseInt(X/40);
+			var Y = parseInt(Y/40);
+			if(X>0 && X<16 && Y > 0 && Y <16)
+				return {x:X,y:Y};
+			return {x:-1,y:-1};
 		}
 	}
 })();

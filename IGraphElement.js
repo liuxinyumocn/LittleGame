@@ -69,14 +69,14 @@ var IGraphElement = [
 			//初始化函数 
 			this.Constructor = function(){
 				//对成员变量赋初值
-				this.LineColor = "rgba(100,100,100,1)";
-				this.LineWeigth = 0.5;
+				this.LineColor = "rgb(250,250,250)";
+				this.LineWeigth = 1;
 				this.LinexCount = 15;
 				this.LineyCount = 15;
 				this.Gap = 40;
 				this.Numberx = new Array("A","B","C","D","E","F","G","H","I","G","K","L","M","N","O");
 				this.Numbery = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15);
-				this.FontColor = this.LineColor;
+				this.FontColor = "rgb(200,200,200)";
 				this.FontSize = 16;
 				this.FontFamily = "宋体";
 				this.Point = new Array(4,4,4,12,12,4,12,12,8,8);
@@ -85,8 +85,8 @@ var IGraphElement = [
 				ctx.beginPath();
 				ctx.lineWidth = this.LineWeigth;
 				//定义线条绘制的左上角起点，用于方便未来增加外围字母编号空隙
-				var left = this.Left+this.FontSize+15;
-				var top = this.Top+this.FontSize+15;
+				var left = this.Left+this.FontSize+20;
+				var top = this.Top+this.FontSize+20;
 				for(var x=0;x<this.LinexCount;x++){
 					ctx.moveTo(left+x*this.Gap,top);
 					ctx.lineTo(left+x*this.Gap,top+(this.LineyCount-1)*this.Gap);
@@ -104,10 +104,10 @@ var IGraphElement = [
 				ctx.fillStyle = this.FontColor;
 				ctx.font = this.FontSize+"px "+this.FontFamily;
 				for(var x=0;x<this.Numberx.length;x++){
-					ctx.fillText(this.Numberx[x],this.Left+27+x*this.Gap,this.Top+this.FontSize);
+					ctx.fillText(this.Numberx[x],this.Left+30+x*this.Gap,this.Top+this.FontSize);
 				}
 				for(var y=0;y<this.Numbery.length;y++){
-					ctx.fillText(this.Numbery[y],this.Left+this.FontSize-15,this.Top+38+y*this.Gap,);
+					ctx.fillText(this.Numbery[y],this.Left+this.FontSize-15,this.Top+40+y*this.Gap,);
 				}
 				//增加5个加重的圆点 坐标点为 4D 4L 12D 12L 8H
 				for(var i=0;i<this.Point.length;i++){
@@ -124,6 +124,84 @@ var IGraphElement = [
 			}
 			this.Over = function(){
 						
+				return false;
+			}
+		}
+	},
+	{
+		ID:"Piece",
+		Version:100.00,
+		Src:new Array(),
+		Class:function(){
+			this.Color;
+			//初始化函数 
+			this.SetWhite = function(){	//将棋子变成白色
+				this.Color = "rgb(205,205,205)";
+			}
+			this.Constructor = function(){
+				this.Color = "rgb(50,50,50)";//默认为黑色
+			}
+			this.Draw = function(ctx){
+				ctx.beginPath();
+				ctx.arc(this.Left,this.Top,18,0,Math.PI*2,true);
+				ctx.fillStyle = this.Color;
+				ctx.fill();
+				ctx.closePath();
+				return true;
+			}
+			this.Over = function(){		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"Sight",
+		Version:100.00,
+		Src:new Array(),
+		Class:function(){
+			this.Color;
+			this.Radius;
+			this.LineWeigth;
+			this.Length;
+			//初始化函数 
+			this.Constructor = function(){
+				this.Color = "rgb(200,200,200)";//默认为黑色
+				this.Radius = 20;
+				this.LineWeigth = 1;
+				this.Length = 5;
+			}
+			this.Draw = function(ctx){
+				ctx.beginPath();
+				ctx.lineWidth = this.LineWeigth;
+
+				var x1,x2,y1,y2;
+				x1 = this.Left-this.Radius;
+				x2 = this.Left+this.Radius;
+				y1 = this.Top-this.Radius;
+				y2 = this.Top+this.Radius;
+
+				ctx.moveTo(x1+this.Length,y1);
+				ctx.lineTo(x1,y1);
+				ctx.lineTo(x1,y1+this.Length);
+				
+				ctx.moveTo(x2-this.Length,y2);
+				ctx.lineTo(x2,y2);
+				ctx.lineTo(x2,y2-this.Length);
+
+				ctx.moveTo(x1+this.Length,y2);
+				ctx.lineTo(x1,y2);
+				ctx.lineTo(x1,y2-this.Length);
+				
+				ctx.moveTo(x2-this.Length,y1);
+				ctx.lineTo(x2,y1);
+				ctx.lineTo(x2,y1+this.Length);
+				
+				ctx.strokeStyle = this.Color;
+				ctx.stroke();
+				ctx.closePath();
+				return true;
+			}
+			this.Over = function(){		
 				return false;
 			}
 		}
