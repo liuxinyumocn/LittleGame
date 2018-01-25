@@ -48,6 +48,30 @@ var IGraphElement = [
 		}
 	},
 	{
+		ID:"NewGameButton",
+		Version:100.00,
+		Src:new Array("NewGame.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[0];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
 		ID:"Board",
 		Version:100.00,
 		Src:new Array(),
@@ -138,8 +162,11 @@ var IGraphElement = [
 			this.SetWhite = function(){	//将棋子变成白色
 				this.Color = "rgb(205,205,205)";
 			}
+			this.SetBlack = function(){	//将棋子变成白色
+				this.Color = "rgb(50,50,50)";
+			}
 			this.Constructor = function(){
-				this.Color = "rgb(50,50,50)";//默认为黑色
+				this.SetBlack();
 			}
 			this.Draw = function(ctx){
 				ctx.beginPath();
@@ -202,6 +229,70 @@ var IGraphElement = [
 				return true;
 			}
 			this.Over = function(){		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"WinnerPNG",
+		Version:100.00,
+		Src:new Array("BlackWinner.png","WhiteWinner.png"),
+		Class:function(){
+			//初始化函数 
+			this.Color;
+			this.Constructor = function(){
+				this.Color = 0;
+			}
+			this.SetColor = function(Num){
+				if(Num!=2){
+					this.Color = 0;
+				}else{
+					this.Color = 1;
+				}
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[this.Color];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[this.Color];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"PlayerPNG",
+		Version:100.00,
+		Src:new Array("BlackPiece.png","WhitePiece.png"),
+		Class:function(){
+			//初始化函数 
+			this.Color;
+			this.Constructor = function(){
+				this.Color = 0;
+			}
+			this.SetColor = function(Num){
+				if(Num!=2){
+					this.Color = 0;
+				}else{
+					this.Color = 1;
+				}
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[this.Color];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[this.Color];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
 				return false;
 			}
 		}
