@@ -58,9 +58,7 @@ var IAnimation;
 		//this.SelectPage(this.CreatePage());
 
 		//Log资源
-		//this._Log = new Log(this);
-
-		this.LastDrawTime = 0;
+		this._Log = new Log(this);
 
 		//Record
 		this._Record = false;
@@ -69,11 +67,11 @@ var IAnimation;
 		//Action资源
 		this._Actions = new Array();
 		this._ActionsSum = 0;
-		//this._MainAction = null; //主动作器
-		//this._NowTime = 0;
+		this._MainAction = null; //主动作器
+		this._NowTime = 0;
 
 			//初始化Action资源
-			//this.CreateAction();
+			this.CreateAction();
 
 		//Event
 		this.DownloadIMGing = function(Total,FinishNum){} //加载进度事件
@@ -83,16 +81,15 @@ var IAnimation;
 		//Debug
 		this._Debug = false;
 
-		/*
 		if(Json == null){//不执行json解析
-			//this._AddAction(this,"_Initialize()");
+			this._AddAction(this,"_Initialize()");
 		}else{
 			//执行JSON解析
 			if(!this._JSON(Json)){
 				//console.log("su");
 				return false; //无法创建
 			}
-		}*/
+		}
 
 		this.SetSize();
 		this.AutoDraw(true);
@@ -102,20 +99,20 @@ var IAnimation;
 		CreatePage:function(ID){ 
 			//如果ID不为空，则查询ID 若存在ID对象则不创建，只执行初始化
 			//if(ID != null){
-				/*var ob = this._Log.IDGetObject(ID);
+				var ob = this._Log.IDGetObject(ID);
 				if(ob != null){
 					//执行Page初始化
 					if(ob == this._Pages[0])
 						this.SelectPage(ob);
-				}*/
+				}
 			//}
 			this._ConloseLog("CreatePage","Pass");
 			this._Pages[this._PagesSum++] = new RenderingPage(this._Canvas,this);
 			if(this._PagesSum == 1)
 				this.SelectPage(this._Pages[this._PagesSum-1]);
 			this.AutoDraw();
-			//var id = this._Log.AddObject(this._Pages[this._PagesSum-1],ID);
-			//this._AddAction(this,"CreatePage()",id);
+			var id = this._Log.AddObject(this._Pages[this._PagesSum-1],ID);
+			this._AddAction(this,"CreatePage()",id);
 			return this._Pages[this._PagesSum-1];
 		},
 		SelectPage:function(PageOb){
@@ -127,7 +124,7 @@ var IAnimation;
 			this._ConloseLog("SelectPage","Selected Page");
 			this.AutoDraw();
 
-			//this._AddAction(this,"_SelectPage()",this._Log.ObjectGetID(PageOb));
+			this._AddAction(this,"_SelectPage()",this._Log.ObjectGetID(PageOb));
 			return true;
 		},
 		_SelectPage:function(PageObID){
@@ -135,15 +132,10 @@ var IAnimation;
 			this.SelectPage(Ob);
 		},
 		Draw:function(){
-			var Now = new Date().getTime();
-			if(Now - this.LastDrawTime < 17){
-				return ;
-			}
-			this.LastDrawTime = Now;
 			this._ConloseLog("Draw","Pass");
 			if(this.CurrentPage != null)
 				this.CurrentPage._Draw();	
-			//this._AddAction(this,"Draw()");
+			this._AddAction(this,"Draw()");
 			return true;
 		},
 		Over:function(x,y){
@@ -161,7 +153,7 @@ var IAnimation;
 			this._Canvas.height = this.Height;
 			this._ConloseLog("SetSize","Set - width:"+this.Width+" | height:"+this.Height);
 			this.AutoDraw();
-			//this._AddAction(this,"SetSize()");
+			this._AddAction(this,"SetSize()");
 			return true;
 		},
 		_SearchPageID:function(PageOb){//查找Page索引
@@ -176,7 +168,7 @@ var IAnimation;
 			this._ConloseLog("DownloadIMG","Pass");
 			return true;
 		},
-		AutoDraw:function(Status){  //自动渲染开关
+		AutoDraw:function(Status){ //自动渲染开关
 			//console.log(Status);
 			if(Status==null){
 				return this._AutoDraw;
@@ -215,7 +207,7 @@ var IAnimation;
 			this._Rate=r;
 			this._ConloseLog("Rate","Set - Status:"+this._Rate);
 			this.AutoDraw();
-			//this._AddAction(this,"Rate()",r);
+			this._AddAction(this,"Rate()",r);
 			return true;
 		},
 		VirtualOriginPoint:function(x,y){
@@ -227,11 +219,11 @@ var IAnimation;
 			this._VirtualOriginPoint.y = y;
 			this._ConloseLog("VirtualOriginPoint","Set - x:"+this._VirtualOriginPoint.x+" | y:"+this._VirtualOriginPoint.y);
 			this.AutoDraw();
-			//this._AddAction(this,"VirtualOriginPoint()",x,y);
+			this._AddAction(this,"VirtualOriginPoint()",x,y);
 			return true;
 		},
 	//-------------------名单系统-------------------
-		/*AddWhiteList:function(Ob,FunStr){
+		AddWhiteList:function(Ob,FunStr){
 			return this._Log.AddWhiteList(Ob,FunStr);
 		},
 		RemoveWhiteList:function(Ob,FunStr){
@@ -260,24 +252,23 @@ var IAnimation;
 			Text += "}";
 			return Text;
 		},
-		*/
+
 	//-------------------动作系统-------------------
-		CreateAction:function(){
+		CreateAction:function(ID){
 			this._ConloseLog("CreateAction","Pass");
 			var Ac = new Action(this._Log,this);
-			/*if(this._MainAction == null){
+			if(this._MainAction == null){
 				this._MainAction = Ac;
 				var t = this;
 				this._MainAction.OnStop = function(){
 					t._Running = false;
 					t.OnStop();
 				}
-			}*/
+			}
 			this._Actions[this._ActionsSum++] = Ac;
-			//this._Log.AddObject(Ac,ID);
+			this._Log.AddObject(Ac,ID);
 			return Ac;
 		},
-		/*
 		//RemoveAction:function(){}, 一经创建无法移除
 		AddTimeout:function(){ //主动作器
 
@@ -296,7 +287,6 @@ var IAnimation;
 			this._Running = false;
 		},
 		_AddAction:function(){
-			return;
 			if(!this._Running){
 				if(this._Record)
 				{
@@ -349,7 +339,7 @@ var IAnimation;
 					return false;
 			}
 			return true;
-		},*/
+		},
 	//-------------------其他函数-------------------
 		Record:function(Status){
 			if(Status == null){
@@ -386,7 +376,7 @@ var IAnimation;
 				IMGCanvasLib.RootDir = Dir;
 			else
 				IMGCanvasLib.RootDir = Dir+"/";
-			//this._AddAction(this,"RootDir()",Dir);
+			this._AddAction(this,"RootDir()",Dir);
 			return true;
 		},
 		Title:function(Name){
@@ -441,7 +431,13 @@ var IAnimation;
 	}
 	RenderingPage.fn = RenderingPage.prototype = {
 		AddElement:function(Name,index,ID){//index 插入索引位置缺省或不合法索引值将尾部插入，0起，索引号小的为底层
-				
+				var ob = this._Animation._Log.IDGetObject(ID);
+				if(ob != null){
+					//执行初始化
+					this.SetPosition(ob,index);
+					ob.Action("Constructor()");
+					return ob;
+				}
 			var IMG;
 			index = index || -1;
 			if(index<0 || index > this._ENum)
@@ -460,8 +456,8 @@ var IAnimation;
 			this._ENum++;
 			//this._Element[index].MID = this._id++;
 			this.AutoDraw();
-			//var id = this._Animation._Log.AddObject(this._Element[index],ID);
-			//this._AddAction(this,"AddElement()",Name,index,id);
+			var id = this._Animation._Log.AddObject(this._Element[index],ID);
+			this._AddAction(this,"AddElement()",Name,index,id);
 			return this._Element[index];
 		},
 		DelElement:function(Ob){
@@ -498,7 +494,7 @@ var IAnimation;
 		SetPosition:function(Ob,index){//index -1最顶层 0最底层 留空默认最顶层
 			//调整元素位置
 			//index = index || this._ENum-1;
-			//this._AddAction(this,"_SetPosition()",this._Animation._Log.ObjectGetID(Ob),index);
+			this._AddAction(this,"_SetPosition()",this._Animation._Log.ObjectGetID(Ob),index);
 			if(index == null)
 				index = this._ENum-1;
 			if(index < 0 || index >= this._ENum)
@@ -538,7 +534,7 @@ var IAnimation;
 			return true;
 		},
 		_SetPosition:function(ID,index){
-			//this.SetPosition(this._Animation._Log.IDGetObject(ID),index);
+			this.SetPosition(this._Animation._Log.IDGetObject(ID),index);
 		},
 		Over:function(x,y){
 			var r = this.Overs(x,y);
@@ -609,7 +605,7 @@ var IAnimation;
 			this._GraphElement = new GraphElement();
 			this._GraphElement.Constructor();
 			this._GraphElement.Self = this;
-			//this._ActionHandle = ActionHandle;
+			this._ActionHandle = ActionHandle;
 			this._PageHandle = PageHandle;
 
 			this._Scale_h = 1;
@@ -623,7 +619,7 @@ var IAnimation;
 
 			this._Visible = false;
 
-			//this._PageHandle._Animation._Log.AddObject(this._GraphElement,ID);
+			this._PageHandle._Animation._Log.AddObject(this._GraphElement,ID);
 
 		}
 		AbstractGraphElement.fn = AbstractGraphElement.prototype = {
@@ -635,7 +631,7 @@ var IAnimation;
 				}
 				this._OLeft = (left - this._PageHandle.GetVirtualOriginPoint().x) / this._PageHandle.GetRate();
 				this._AutoDraw();
-				//this._AddAction(this,"Left()",left);
+				this._AddAction(this,"Left()",left);
 			},
 			Top:function(top){
 				//计算出基于O坐标系方位坐标
@@ -645,14 +641,14 @@ var IAnimation;
 				}
 				this._OTop = (top - this._PageHandle.GetVirtualOriginPoint().y) / this._PageHandle.GetRate();
 				this._AutoDraw();
-				//this._AddAction(this,"Top()",top);
+				this._AddAction(this,"Top()",top);
 			},
 			Visible:function(Status){
 				if(Status == null)
 					return Status;
 				this._Visible = Status;
 				this._AutoDraw();
-				//this._AddAction(this,"Visible()",Status);
+				this._AddAction(this,"Visible()",Status);
 				return true;
 			},
 			Scale:function(Rate,h){
@@ -664,7 +660,7 @@ var IAnimation;
 				this._Scale_w = Rate;
 				this._Scale_h = h || Rate;
 				this._AutoDraw();
-				//this._AddAction(this,"Scale()",this._Scale_w ,this._Scale_h);
+				this._AddAction(this,"Scale()",this._Scale_w ,this._Scale_h);
 				return true;
 			},
 			Rotate:function(Angle){ //弧度制，圆周率需使用Math.PI 注意该操作仅对当前元素有效且永久有效 如需还原输入 0 
@@ -673,7 +669,7 @@ var IAnimation;
 				}
 				this._Angle = Angle || 0;
 				this._AutoDraw();
-				//this._AddAction(this,"Rotate()",Angle);
+				this._AddAction(this,"Rotate()",Angle);
 				return true;
 			},
 			Action:function(){
@@ -686,7 +682,7 @@ var IAnimation;
 				for(var i = 0 ; i < arguments.length;i++){
 					ArgsAc[i+2] = arguments[i];
 				}
-				//this._AddAction.apply(this,ArgsAc);
+				this._AddAction.apply(this,ArgsAc);
 
 				var Arg1 = arguments[0];
 				var Arg1Type = typeof Arg1;
@@ -777,7 +773,7 @@ var IAnimation;
 				this._PageHandle.AutoDraw();
 			},
 			_AddAction:function(){
-				//this._ActionHandle.apply(this._PageHandle._Animation,arguments);
+				this._ActionHandle.apply(this._PageHandle._Animation,arguments);
 			},
 			_Initialize:function(){
 				this._Scale_h = 1;
@@ -796,7 +792,7 @@ var IAnimation;
 	//RenderingPage 组件
 
 	//Log 组件 Start
-	/*	var ObLogInfo = function(Ob,FunStr){
+		var ObLogInfo = function(Ob,FunStr){
 			this.Ob = Ob;
 			this.FunStr = FunStr;
 		}
@@ -923,7 +919,7 @@ var IAnimation;
 				优先级顺序解释：
 					白名单检索对象.函数 有：记录 无：黑名单检索对象.函数 有：不记录 无：白名单检索对象 有：记录 无：黑名单检索对象 有：不记录 无：记录
 			*/
-		/*},
+		},
 		SObject:function(Ob,FunStr){ //审核元素方法是否需要被记录 从超级黑名单角度
 			var rB = this._SearchList(this._SuperBlackList,this._SSum,Ob,FunStr);
 			if(rB.result == true)
@@ -935,7 +931,7 @@ var IAnimation;
 				优先级解释：
 					超级黑名单有 对象 则不记录 仅有 对象.函数 则该函数不记录
 			*/
-		/*},
+		},
 		//Map
 		AddObject:function(Ob,ID){
 			return this._Map.AddObject(Ob,ID);
@@ -963,8 +959,8 @@ var IAnimation;
 			return true;
 		}
 
-	}*/
-	/*	//_Map Start
+	}
+		//_Map Start
 		var _MapOb = function(Ob,ID){
 			this.Ob = Ob;
 			this.ID = ID;
@@ -1032,7 +1028,7 @@ var IAnimation;
 		}
 		//_Map End
 
-	//Log End*/
+	//Log End
 
 	//Action 组件 Start
 		var AcOb = function(Ob,ID,Str,An){
@@ -1227,7 +1223,7 @@ var IAnimation;
 			return eval("this.AddAction(this._Animation,"+ArgsText+")");
 		},
 		_GetObID:function(Ob){
-			//return this._Log.ObjectGetID(Ob);
+			return this._Log.ObjectGetID(Ob);
 		},
 		_Next:function(){ //移动到下一个播放索引 当没有所需播放索引时 变更播放状态
 			if(this._Num == 0){
