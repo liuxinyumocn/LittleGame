@@ -116,14 +116,7 @@ var Gobang;
 		},
 		_Move:function(){
 			if(this._Animation.CurrentPage == this._MainPage){
-				var x = this._Listener.X;
-				var y = this._Listener.Y;
-				var ps = PiecePostionKit.ScreenPostion(x,y);
-				if(ps.x != -1){
-					var p = PiecePostionKit.BoardPostion(ps.x,ps.y);
-					this._Sight.Left(p.x);
-					this._Sight.Top(p.y);
-				}
+				this.ReflashSight()
 			}else{
 				var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
 				if(Result == this._BeginGameButton)
@@ -132,7 +125,12 @@ var Gobang;
 		},
 		_Up:function(){
 			var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
-
+			if(this._Animation.CurrentPage == this._MainPage){
+				//对GameControl传输指令
+				var x = this._Listener.X;
+				var y = this._Listener.Y;
+				this._GameControl.Down(x,y);
+			}
 			if(Result == this._BeginGameButton){
 				this._Animation.SelectPage(this._MainPage);
 			}
@@ -142,10 +140,17 @@ var Gobang;
 		},
 		_Down:function(){
 			if(this._Animation.CurrentPage == this._MainPage){
-				//对GameControl传输指令
-				var x = this._Listener.X;
-				var y = this._Listener.Y;
-				this._GameControl.Down(x,y);
+				this.ReflashSight();
+			}
+		},
+		ReflashSight:function(){
+			var x = this._Listener.X;
+			var y = this._Listener.Y;
+			var ps = PiecePostionKit.ScreenPostion(x,y);
+			if(ps.x != -1){
+				var p = PiecePostionKit.BoardPostion(ps.x,ps.y);
+				this._Sight.Left(p.x);
+				this._Sight.Top(p.y);
 			}
 		}
 	}
