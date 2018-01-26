@@ -10,6 +10,7 @@ var Gobang;
 		this._BeginGameButton = null;
 		this._BeginGameButtonAction = null;
 		this._NewGameButton = null;
+		this._BackButton = null;
 
 		this._GameControl = null;
 
@@ -25,7 +26,7 @@ var Gobang;
 				}
 			}
 			this._Animation.DownloadIMGing = CallBack;
-			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton"]);
+			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton"]);
 		},
 		_DownloadFinished:function(){
 			//此处外部资源已经全部加载完毕可以创建游戏场景。
@@ -109,6 +110,12 @@ var Gobang;
 			this._NewGameButton.Top(590);
 			this._NewGameButton.Visible(true);
 
+			//悔棋按钮
+			this._BackButton = this._MainPage.AddElement("BackButton");
+			this._BackButton.Left(680);
+			this._BackButton.Top(500);
+			this._BackButton.Visible(true);
+
 			//创建GameControl
 			this._GameControl = new GameControl(this._MainPage);
 			this._GameControl.Start();
@@ -133,9 +140,10 @@ var Gobang;
 			}
 			if(Result == this._BeginGameButton){
 				this._Animation.SelectPage(this._MainPage);
-			}
-			if(Result == this._NewGameButton){
+			}else if(Result == this._NewGameButton){
 				this._GameControl.Start();
+			}else if(Result == this._BackButton){
+				this._GameControl.Back();
 			}
 		},
 		_Down:function(){
@@ -290,6 +298,20 @@ var Gobang;
 		AddSteps:function(x,y){
 			var p = this.CurrentPlayer;
 			this.Steps[this.StepsNum++] = {x:x,y:y,p:p};
+		},
+		Back:function(){
+			if(this.Winner != 0)
+				return false; //游戏已经结束
+			//悔棋
+			if(this.StepsNum == 0)
+				return true;
+			var step = this.Steps[--this.StepsNum];
+			//清除该落点棋子
+			//console.log(step);
+			this.Data[step.x-1][step.y-1] = 0;
+			//交换选手
+			this.CurrentPlayer = this.CurrentPlayer == 1?2:1;
+			return true;
 		}
 	}
 
@@ -370,6 +392,10 @@ var Gobang;
 					this.WinnerPNG.Visible(true);
 				}
 			}
+		},
+		Back:function(){
+			this.GameCore.Back();
+			this.Show();
 		}
 	}
 

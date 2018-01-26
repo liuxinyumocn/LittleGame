@@ -131,7 +131,7 @@ var IGraphElement = [
 					ctx.fillText(this.Numberx[x],this.Left+30+x*this.Gap,this.Top+this.FontSize);
 				}
 				for(var y=0;y<this.Numbery.length;y++){
-					ctx.fillText(this.Numbery[y],this.Left+this.FontSize-15,this.Top+40+y*this.Gap,);
+					ctx.fillText(this.Numbery[y],this.Left+this.FontSize-15,this.Top+40+y*this.Gap);
 				}
 				//增加5个加重的圆点 坐标点为 4D 4L 12D 12L 8H
 				for(var i=0;i<this.Point.length;i++){
@@ -289,6 +289,30 @@ var IGraphElement = [
 			}
 			this.Over = function(){
 				var Img = this.Src[this.Color];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"BackButton",
+		Version:100.00,
+		Src:new Array("BackPNG.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[0];
 				var x = this.Left > 0 ? this.Left : 0-this.Left;
 				var y = this.Top > 0 ? this.Top : 0-this.Top;
 				if(x <= Img.width/2 && y <= Img.height/2)
