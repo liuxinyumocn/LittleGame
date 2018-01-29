@@ -24,6 +24,34 @@ var IGraphElement = [
 		}
 	},
 	{
+		ID:"Loading",
+		Version:100.00,
+		Src:new Array(),
+		Class:function(){
+			//初始化函数 
+			this.Finished = 0;
+			this.Total = Math.PI*2;
+			this.Constructor = function(){
+				
+			}
+			this.Finish = function(v){
+				this.Finished = this.Total*v;
+			}
+			this.Draw = function(ctx){
+				ctx.beginPath();
+				ctx.arc(this.Left,this.Top,100,0,this.Finished,false);
+				//ctx.fillStyle = "rgba(205,205,205,0.5)";
+				ctx.lineWidth = 30;
+				ctx.strokeStyle = "rgba(205,205,205,0.5)";
+				ctx.stroke();
+				ctx.closePath();
+			}
+			this.Over = function(){
+				
+			}
+		}
+	},
+	{
 		ID:"BeginGameButton",
 		Version:100.00,
 		Src:new Array("BeginGame.png"),
@@ -51,6 +79,30 @@ var IGraphElement = [
 		ID:"NewGameButton",
 		Version:100.00,
 		Src:new Array("NewGame.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[0];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"BattleOnlineButton",
+		Version:100.00,
+		Src:new Array("BattleOnline.png"),
 		Class:function(){
 			//初始化函数 
 			this.Constructor = function(){
@@ -317,6 +369,166 @@ var IGraphElement = [
 				var y = this.Top > 0 ? this.Top : 0-this.Top;
 				if(x <= Img.width/2 && y <= Img.height/2)
 					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"SelectRoomTIP",
+		Version:100.00,
+		Src:new Array("SelectRoomTIP.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"WaitingFriend",
+		Version:100.00,
+		Src:new Array("waitingfriend.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"ReadyPNG",
+		Version:100.00,
+		Src:new Array("Ready.png","cancelReady.png","UnReady.png","Readyed.png"),
+		Class:function(){
+			//初始化函数 
+			this.Ready;
+			this.SetStatus = function(v){
+				this.Ready = v;
+				return v;
+			}
+			this.GetStatus = function(){
+				return this.Ready;
+			}
+			this.Constructor = function(){
+				this.Ready = 0;
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[this.Ready];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[this.Ready];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"Number",
+		Version:100.00,
+		Src:new Array("1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png"),
+		Class:function(){
+			//初始化函数 
+			this.lineWidth;
+			this.Color;
+			this.Number;
+			this.Constructor = function(){
+				this.lineWidth = 3;
+				this.Color = "rgb(205,205,205)";
+				this.Number = 1;
+			}
+			this.SetNumber = function(i){
+				this.Number = i;
+			}
+			this.Clicked = function(v){
+				if(v){
+					this.Color = "rgb(244,40,27)";
+				}else{
+					this.Color = "rgb(205,205,205)";
+				}
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[this.Number-1];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				//画外边圆圈
+				ctx.beginPath();
+				ctx.arc(this.Left,this.Top,40,0,Math.PI*2,true);
+				ctx.lineWidth = this.lineWidth;
+				ctx.strokeStyle = this.Color;
+				ctx.stroke();
+				ctx.closePath();
+				return true;
+			}
+			this.Over = function(){		
+				var Img = this.Src[0];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
+		ID:"OneLine",
+		Version:100.00,
+		Src:new Array(),
+		Class:function(){
+			//初始化函数 
+			this.Point;
+			this.Num = 0;
+			this.lineWidth;
+			this.Color;
+			this.Constructor = function(){
+				this.Point = new Array();
+				this.Num = 0;
+				this.lineWidth = 5;
+				this.Color = "rgb(244,40,27)";
+			}
+			this.AddPoint = function(X,Y){
+				this.Point[this.Num++] = {x:X,y:Y};
+			}
+			this.Clean = function(){
+				this.Point = new Array();
+				this.Num = 0;
+			}
+			this.Draw = function(ctx){
+				if(this.Num > 1){
+					ctx.beginPath();
+					ctx.lineWidth = this.lineWidth;
+					ctx.moveTo(this.Point[0].x,this.Point[0].y);
+					for(var i = 1;i<this.Num;i++){
+						ctx.lineTo(this.Point[i].x,this.Point[i].y);
+					}
+					ctx.strokeStyle = this.Color;
+					ctx.lineJoin="round";
+					ctx.stroke();
+					ctx.closePath();
+				}
+
+				return true;
+			}
+			this.Over = function(){		
 				return false;
 			}
 		}
