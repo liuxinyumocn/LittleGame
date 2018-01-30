@@ -68,7 +68,7 @@ var Gobang;
 				}
 			}
 			this._Animation.DownloadIMGing = CallBack;
-			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton","BattleOnlineButton","SelectRoomTIP","Number","OneLine","WaitingFriend","ReadyPNG"]);
+			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton","BattleOnlineButton","SelectRoomTIP","Number","OneLine","WaitingFriend","ReadyPNG","ReEnterRoomPNG"]);
 			
 			this._Server = new Server();
 			//this._Server.SetInfo("ws://121.42.197.141","8888");
@@ -201,6 +201,10 @@ var Gobang;
 			TIP.Top(60);
 			TIP.Visible(true);
 
+			this._ReEnterRoomTIP = this._SelectRoomPage.AddElement("ReEnterRoomPNG");
+			this._ReEnterRoomTIP.Left(this._Animation.Width/2);
+			this._ReEnterRoomTIP.Top(560);
+
 			this._WaitingFriendPNG = this._SelectRoomPage.AddElement("WaitingFriend");
 			this._WaitingFriendPNG.Left(150);
 			this._WaitingFriendPNG.Top(600);
@@ -294,6 +298,7 @@ var Gobang;
 				function IsNumber(Result){
 					for(var i = 0;i<9;i++){
 						if(t._NumbersButton[i] == Result){
+							t._ReEnterRoomTIP.Visible(false);
 							t._OnelineLink = new OneLineLink(t._NumbersButton,t._OneLine);
 							t._OnelineLink.Click(Result);
 							break;
@@ -463,6 +468,7 @@ var Gobang;
 			//console.log(2);
 			this._OnelineLink = new OneLineLink(this._NumbersButton,this._OneLine);
 			this._WaitingFriendPNG.Visible(false);
+			this._ReEnterRoomTIP.Visible(true);
 			this._Animation.SelectPage(this._SelectRoomPage);
 		}
 	}

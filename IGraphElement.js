@@ -444,6 +444,30 @@ var IGraphElement = [
 		}
 	},
 	{
+		ID:"ReEnterRoomPNG",
+		Version:100.00,
+		Src:new Array("reenterroom.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+	
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				var Img = this.Src[0];
+				var x = this.Left > 0 ? this.Left : 0-this.Left;
+				var y = this.Top > 0 ? this.Top : 0-this.Top;
+				if(x <= Img.width/2 && y <= Img.height/2)
+					return true;		
+				return false;
+			}
+		}
+	},
+	{
 		ID:"Number",
 		Version:100.00,
 		Src:new Array("1.png","2.png","3.png","4.png","5.png","6.png","7.png","8.png","9.png"),
