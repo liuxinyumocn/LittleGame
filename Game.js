@@ -13,6 +13,8 @@ var Gobang;
 		//Gobang游戏类的构造函数
 		this._Animation = new IAnimation(Container);
 		this._Listener = new ICanvasListener(Container);
+
+		this._Rate = 1;
 		//成员变量声明
 		this._WelcomePage = null;
 		this._MainPage = null;
@@ -44,6 +46,14 @@ var Gobang;
 		this._Init();
 	}
 	Gobang.fn = Gobang.prototype = {
+		Rate:function(v){
+			if(v==null)
+				return this._Rate;
+			else if(v>0){
+				this._Rate = v;
+				this._Animation.Rate(v);
+			}
+		},
 		_Init:function(){
 			var t = this;
 			var LoadingPage = this._Animation.CreatePage();
@@ -61,6 +71,7 @@ var Gobang;
 			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton","BattleOnlineButton","SelectRoomTIP","Number","OneLine","WaitingFriend","ReadyPNG"]);
 			
 			this._Server = new Server();
+			//this._Server.SetInfo("ws://121.42.197.141","8888");
 			var t = this;
 			this._Server.OnErr = function(d,ds){
 				t.OnResponse(d,ds);
@@ -212,7 +223,7 @@ var Gobang;
 			if(this._Animation.CurrentPage == this._MainPage){
 				this.ReflashSight()
 			}else{
-				var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
+				var Result = this._Animation.Over(this._Listener.X/this._Rate,this._Listener.Y/this._Rate);
 				if(Result == this._BeginGameButton)
 					this._BeginGameButtonAction.Run();
 				if(Result == this._BattleOnlineButton)
@@ -220,18 +231,18 @@ var Gobang;
 			}
 
 			if(this._Animation.CurrentPage == this._SelectRoomPage){
-				var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
+				var Result = this._Animation.Over(this._Listener.X/this._Rate,this._Listener.Y/this._Rate);
 				if(this._OnelineLink != null){
 					this._OnelineLink.Click(Result);
 				}
 			}
 		},
 		_Up:function(){
-			var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
+			var Result = this._Animation.Over(this._Listener.X/this._Rate,this._Listener.Y/this._Rate);
 			if(this._Animation.CurrentPage == this._MainPage){
 				//对GameControl传输指令
-				var x = this._Listener.X;
-				var y = this._Listener.Y;
+				var x = this._Listener.X/this._Rate;
+				var y = this._Listener.Y/this._Rate;
 				if(!this._StartStatus)
 					this._GameControl.Down(x,y);
 				else{
@@ -267,6 +278,7 @@ var Gobang;
 				var key = this._OnelineLink.GetText();
 				if(key.length <= 2){
 					this._OnelineLink.Init();
+					this._OnelineLink = null;
 				}else{
 					//开始连接服务器并发送Key值
 					this._ApplyRoom(key);
@@ -288,15 +300,15 @@ var Gobang;
 						}
 					}
 				}
-				var Result = this._Animation.Over(this._Listener.X,this._Listener.Y);
+				var Result = this._Animation.Over(this._Listener.X/this._Rate,this._Listener.Y/this._Rate);
 				if(IsNumber(Result)){
 
 				}
 			}
 		},
 		ReflashSight:function(){
-			var x = this._Listener.X;
-			var y = this._Listener.Y;
+			var x = this._Listener.X/this._Rate;
+			var y = this._Listener.Y/this._Rate;
 			var ps = PiecePostionKit.ScreenPostion(x,y);
 			if(ps.x != -1){
 				var p = PiecePostionKit.BoardPostion(ps.x,ps.y);
@@ -394,12 +406,16 @@ var Gobang;
 					var y = json.y;
 					this._GameControl.Down2(x,y);
 				}else if(json.ac == "Winner"){
-					console.log(data.data);
+					//console.log(data.data);
 					this._OnlineInitRoom();
+				}else if(json.ac == "ReEnterRoom"){//对手离开房间返回匹配界面
+					//console.log(data.data);
+					this._BackToSelectFriPage();
 				}
 			}
 		},
 		_OnlineInitRoom:function(){ //初始化房间并进入
+			
 			this._NewGameButton.Visible(false);
 			this._ReadyButton.Action("SetStatus()",0);
 			this._ReadyButton.Visible(true);
@@ -438,6 +454,16 @@ var Gobang;
 			this._ReadyButton.Visible(false);
 			this._StartStatus = true;
 			this._GameControl.Start();
+		},
+		_BackToSelectFriPage:function(){
+			this._OnlineInitRoom();
+			this._InitSelectRoomPage();
+		},
+		_InitSelectRoomPage:function(){
+			//console.log(2);
+			this._OnelineLink = new OneLineLink(this._NumbersButton,this._OneLine);
+			this._WaitingFriendPNG.Visible(false);
+			this._Animation.SelectPage(this._SelectRoomPage);
 		}
 	}
 	
@@ -694,7 +720,7 @@ var Gobang;
 	}
 
 	var Server = function(){ //在线对战游戏引擎
-		this.ServerIP = "ws://121.42.197.141";
+		this.ServerIP = "ws://localhost";
 		this.ServerPort = "8888";
 
 		this.Open = false;

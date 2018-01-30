@@ -17,6 +17,8 @@ var ICanvasListener;
 		this.X = -1 ;
 		this.Y = -1 ;
 
+		this._Rate = 1;
+
 		this._EventMouseMove = new Array();
 		this._EventMouseDown = new Array();
 		this._EventMouseUp = new Array();
