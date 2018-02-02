@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<title>面对面五子棋 Power By Liuxinyumo.cn</title>
+	<style type="text/css">
+		*{
+			margin: 0px;
+			padding:0px;
+		}
+		body{
+			background-color: rgb(244,244,244);
+			font-family: "\5FAE\8F6F\96C5\9ED1", Helvetica;
+		}
+		.Container{
+			margin-bottom: 10px;
+			background-color: rgb(255,255,255);
+		}
+		.Header{
+			width: 100%;
+			height: 50px;
+			background-color: rgb(75,177,226);
+			background-image: url("src/HeaderLogo.png");
+			background-position: 50% 50%;
+			background-repeat: no-repeat;
+			background-size: 150px 40px;
+		}
+		.Main{
+			width: 100%;
+			height: 86.7vw;
+		}
+		.Info{
+			padding-bottom: 10px;
+		}
+		.Bar{
+			height: 4px;
+			background-color: rgb(162,215,244);
+		}
+		.Info .title{
+			background-image: url("src/compass.png");
+			background-repeat: no-repeat;
+			background-position: 20px 50%;
+			background-size: 27px 27px;
+			height: 40px;
+			padding-left: 60px;
+			line-height: 40px;
+			font-size: 1em;
+			font-weight: bold;
+		}
+		.Info .content{
+			padding:0px 10px;
+		}
+		.Footer{
+			height: 40px;
+			text-align: center;
+			line-height: 40px;
+			color: rgb(75,177,226);
+			font-size: 0.8em;
+			margin-bottom: 0px;
+		}
+	</style>
+</head>
+<body onresize="ReSize()">
+	<div class="Header Container"></div>
+	<div class="Main Container" id="GameView"></div>
+	<div class="Info Container">
+		<div class="Bar"></div>
+		<div class="title">游戏介绍</div>
+		<div class="content">
+	<p>
+   	 <span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这是一个非常经典的对弈游戏，对战选手分别持黑、白色棋子，每局执黑棋先行，优先使得己方棋子形成5子相连即为获胜。<br/></span>
+</p>
+<p>
+    <span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本游戏作品为小伙伴们提供2种游戏模式。“开始游戏”则为本地对弈游戏，推荐使用Pad或电脑设备双方轮流操作执子。“面对面对战”为网络联机对弈，需要保证使用者设备已经连接互联网并保持畅通，点击“面对面对战”进入匹配界面，仅需要双方按照相同顺序滑动即可快速匹配进入游戏开始对弈。<br/></span>
+</p>
+<p>
+    <span style="font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏操作简单，无须下载安装，还等什么？快喊上小伙伴来一场痛快的对局！<br/></span>
+</p>
+		</div>
+	</div>
+	<div class="Footer Container">
+		<div class="Bar"></div>
+		Power by <a href="http://liuxinyumo.cn">Liuxinyumo.cn</a>
+	</div>
+</body>
+<script type="text/javascript" src="IGraphElement.js"></script>
+<script type="text/javascript" src="IAnimation.js"></script>
+<script type="text/javascript" src="ICanvasListenerB1.0.0.js"></script>
+<script type="text/javascript" src="Game.js"></script>
+<script type="text/javascript">
+	var GameView = document.getElementById("GameView");
+	var game = new Gobang(GameView);
+	function ReSize(){
+		//game.Resize();
+	}
+</script>
+<script type="text/javascript" src="http://tajs.qq.com/stats?sId=53468119" charset="UTF-8"></script>
+</html>

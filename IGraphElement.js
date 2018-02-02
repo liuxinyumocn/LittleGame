@@ -24,6 +24,25 @@ var IGraphElement = [
 		}
 	},
 	{
+		ID:"Background",
+		Version:100.00,
+		Src:new Array("background.png"),
+		Class:function(){
+			//初始化函数 
+			this.Constructor = function(){
+				
+			}
+			this.Draw = function(ctx){
+				var Img = this.Src[0];
+				ctx.drawImage(Img,this.Left-Img.width/2,this.Top-Img.height/2,Img.width,Img.height);
+				return true;
+			}
+			this.Over = function(){
+				return false;
+			}
+		}
+	},
+	{
 		ID:"Loading",
 		Version:100.00,
 		Src:new Array(),
@@ -39,10 +58,10 @@ var IGraphElement = [
 			}
 			this.Draw = function(ctx){
 				ctx.beginPath();
-				ctx.arc(this.Left,this.Top,100,0,this.Finished,false);
+				ctx.arc(this.Left,this.Top,50,0,this.Finished,false);
 				//ctx.fillStyle = "rgba(205,205,205,0.5)";
-				ctx.lineWidth = 30;
-				ctx.strokeStyle = "rgba(205,205,205,0.5)";
+				ctx.lineWidth = 15;
+				ctx.strokeStyle = "rgb(75,177,226)";
 				ctx.stroke();
 				ctx.closePath();
 			}

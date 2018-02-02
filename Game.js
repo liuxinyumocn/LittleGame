@@ -11,10 +11,12 @@ var Gobang;
 	}
 	Gobang = function(Container){
 		//Gobang游戏类的构造函数
+		this._Container = Container;
 		this._Animation = new IAnimation(Container);
 		this._Listener = new ICanvasListener(Container);
 
 		this._Rate = 1;
+		this._Animation.SetCanvasSize(750,650);
 		//成员变量声明
 		this._WelcomePage = null;
 		this._MainPage = null;
@@ -42,7 +44,7 @@ var Gobang;
 		//事件
 		this.OnClickBattleOnlineButton = function(){}	//需要提供4位数字字符串提供面对面对战口令
 		this.OnResponse = function(e,ds){}
-
+		this.Resize();
 		this._Init();
 	}
 	Gobang.fn = Gobang.prototype = {
@@ -51,15 +53,23 @@ var Gobang;
 				return this._Rate;
 			else if(v>0){
 				this._Rate = v;
-				this._Animation.Rate(v);
+				//this._Animation.Rate(v);
 			}
+		},
+		Resize:function(){
+			var w = this._Container.offsetWidth;
+			var h = this._Container.offsetHeight;
+			h = 0.867 * w;
+			var r = w/750;
+			//this._Animation.SetSize(w,h);
+			this.Rate(r);
 		},
 		_Init:function(){
 			var t = this;
 			var LoadingPage = this._Animation.CreatePage();
 			var Info = LoadingPage.AddElement("Loading");
-			Info.Left(this._Animation.Width/2);
-			Info.Top(this._Animation.Height/2);
+			Info.Left(375);
+			Info.Top(325);
 			Info.Visible(true);
 			function CallBack(a,b){
 				Info.Action("Finish()",b/a);
@@ -68,10 +78,10 @@ var Gobang;
 				}
 			}
 			this._Animation.DownloadIMGing = CallBack;
-			this._Animation.DownloadIMG(["GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton","BattleOnlineButton","SelectRoomTIP","Number","OneLine","WaitingFriend","ReadyPNG","ReEnterRoomPNG"]);
+			this._Animation.DownloadIMG(["Background","GobangLogo","BeginGameButton","Board","Piece","WinnerPNG","PlayerPNG","NewGameButton","BackButton","BattleOnlineButton","SelectRoomTIP","Number","OneLine","WaitingFriend","ReadyPNG","ReEnterRoomPNG"]);
 			
 			this._Server = new Server();
-			//this._Server.SetInfo("ws://121.42.197.141","8888");
+			this._Server.SetInfo("ws://121.42.197.141","8888");
 			var t = this;
 			this._Server.OnErr = function(d,ds){
 				t.OnResponse(d,ds);
@@ -118,14 +128,18 @@ var Gobang;
 			//创建游戏欢迎页面
 			this._WelcomePage = this._Animation.CreatePage();
 			//在场景中布局
+			var background = this._WelcomePage.AddElement("Background");
+			background.Left(375);
+			background.Top(325);
+			background.Visible(true);
 			var Logo = this._WelcomePage.AddElement("GobangLogo");
-			Logo.Left(this._Animation.Width/2);
-			Logo.Top(this._Animation.Height/2-150);
+			Logo.Left(375);
+			Logo.Top(175);
 			Logo.Visible(true);
 			var BeginGameButton = this._WelcomePage.AddElement("BeginGameButton");
 			this._BeginGameButton = BeginGameButton;
-			BeginGameButton.Left(this._Animation.Width/2);
-			BeginGameButton.Top(this._Animation.Height/2-30);
+			BeginGameButton.Left(375);
+			BeginGameButton.Top(295);
 			BeginGameButton.Visible(true);
 			this._BeginGameButtonAction = this._Animation.CreateAction();
 			this._BeginGameButtonAction.Loop(3);
@@ -136,8 +150,8 @@ var Gobang;
 			this._BeginGameButtonAction.AddAction(BeginGameButton,"Rotate()",0);
 		
 			this._BattleOnlineButton = this._WelcomePage.AddElement("BattleOnlineButton");
-			this._BattleOnlineButton.Left(this._Animation.Width/2);
-			this._BattleOnlineButton.Top(this._Animation.Height/2+60);
+			this._BattleOnlineButton.Left(375);
+			this._BattleOnlineButton.Top(385);
 			this._BattleOnlineButton.Visible(true);
 			this._BattleOnlineButtonAction = this._Animation.CreateAction();
 			this._BattleOnlineButtonAction .Loop(3);
@@ -150,6 +164,10 @@ var Gobang;
 		},
 		_CreateMainScene:function(){
 			this._MainPage = this._Animation.CreatePage();
+			var background = this._MainPage.AddElement("Background");
+			background.Left(375);
+			background.Top(325);
+			background.Visible(true);
 			var Board = this._MainPage.AddElement("Board");
 			Board.Left(15);
 			Board.Top(15);
@@ -196,13 +214,17 @@ var Gobang;
 		_CreateSelectRoom:function(){
 			//选择游戏房间界面
 			this._SelectRoomPage = this._Animation.CreatePage();
+			var background = this._SelectRoomPage.AddElement("Background");
+			background.Left(375);
+			background.Top(325);
+			background.Visible(true);
 			var TIP = this._SelectRoomPage.AddElement("SelectRoomTIP");
-			TIP.Left(this._Animation.Width/2);
+			TIP.Left(375);
 			TIP.Top(60);
 			TIP.Visible(true);
 
 			this._ReEnterRoomTIP = this._SelectRoomPage.AddElement("ReEnterRoomPNG");
-			this._ReEnterRoomTIP.Left(this._Animation.Width/2);
+			this._ReEnterRoomTIP.Left(375);
 			this._ReEnterRoomTIP.Top(560);
 
 			this._WaitingFriendPNG = this._SelectRoomPage.AddElement("WaitingFriend");

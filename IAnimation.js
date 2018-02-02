@@ -164,6 +164,11 @@ var IAnimation;
 			//this._AddAction(this,"SetSize()");
 			return true;
 		},
+		SetCanvasSize:function(w,h){
+			this._Canvas.width = w;
+			this._Canvas.height = h;
+			this._Canvas.style.cssText = "width:"+this.Width+"px;height:"+this.Height+"px";
+		},
 		_SearchPageID:function(PageOb){//查找Page索引
 			for(var i = 0 ;i<this._PagesSum ;i++){
 				if(this._Pages[i] == PageOb)
@@ -767,8 +772,8 @@ var IAnimation;
 				Oy = y - this.Top();
 				var ox = Ox * Math.cos(-this._Angle) - Oy * Math.sin(-this._Angle); //反向旋转坐标
 				var oy = Oy * Math.cos(-this._Angle) + Ox * Math.sin(-this._Angle);
-				ox /= (this._Scale_w * Rate);
-				oy /= (this._Scale_h * Rate);
+				ox /= (this._Scale_w );
+				oy /= (this._Scale_h );
 				this._GraphElement.Left = ox;
 				this._GraphElement.Top = oy;
 				return this._GraphElement.Over();
